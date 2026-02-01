@@ -11,6 +11,15 @@ use waybar_cffi::gtk::prelude::{ContainerExt, LabelExt};
 use waybar_cffi::{gtk, Module};
 use waybar_cffi::{waybar_module, InitInfo};
 
+#[allow(non_upper_case_globals)]
+const KiB: usize = 0x400;
+#[allow(non_upper_case_globals)]
+const MiB: usize = KiB * 0x400;
+#[allow(non_upper_case_globals)]
+const GiB: usize = MiB * 0x400;
+#[allow(non_upper_case_globals)]
+const TiB: usize = GiB * 0x400;
+
 pub struct WaybarGpuModule;
 
 pub struct AmdGPUStats {
@@ -80,15 +89,29 @@ impl AmdGPUStats {
     pub fn build_label_string(&self, format_string: &str) -> String {
         format_string
             .replace("{gpu_usage_percent}", self.gpu_usage.to_string().as_ref())
-            .replace("{gpu_mem_total}", self.mem_total.to_string().as_ref())
-            .replace("{gpu_mem_used}", self.mem_used.to_string().as_str())
+            .replace("{gpu_mem_total}", format_iec(self.mem_total as f64).as_str())
+            .replace("{gpu_mem_used}", format_iec(self.mem_used as f64).as_str())
             .replace(
                 "{gpu_mem_used_percent}",
                 self.mem_used_percent.to_string().as_str(),
             )
-            .replace("{gpu_mem_free}", self.mem_free.to_string().as_str())
+            .replace("{gpu_mem_free}", format_iec(self.mem_free as f64).as_str())
             .replace("{gpu_usage}", self.gpu_usage.to_string().as_str())
             .replace("{gpu_temp}", self.gpu_temp.to_string().as_str())
+    }
+}
+
+fn format_iec(value: f64) -> String {
+    if value < KiB as f64 {
+        format!("{value}B")
+    } else if value < MiB as f64 {
+        format!("{:.2}KiB", value / KiB as f64)
+    } else if value < GiB as f64 {
+        format!("{:.2}MiB", value / MiB as f64)
+    } else if value < TiB as f64 {
+        format!("{:.2}GiB", value / GiB as f64)
+    } else {
+        format!("{:.2}TiB", value / TiB as f64)
     }
 }
 
