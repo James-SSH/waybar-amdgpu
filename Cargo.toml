@@ -1,0 +1,13 @@
+[package]
+name = "waybar_gpu_module"
+version = "0.1.0"
+edition = "2024"
+
+[lib]
+crate-type = ["cdylib"]
+name = "amdgpu"
+
+[dependencies]
+waybar-cffi = "0.1.1"
+serde = { version = "1", features = ["derive"] }
+amdsmi = {path = "src/amdsmi/rust-interface"}

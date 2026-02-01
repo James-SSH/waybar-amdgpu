@@ -1,0 +1,3 @@
+[submodule "src/amdsmi"]
+	path = src/amdsmi
+	url = https://github.com/ROCm/amdsmi
