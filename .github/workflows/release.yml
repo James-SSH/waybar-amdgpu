@@ -20,7 +20,7 @@ on:
       - Cargo.toml
 
 env:
-  targets: '[
+  TARGETS: '[
   {"target_triple": "aarch64-unknown-linux-gnu", "target_short": "arm64"}, 
   {"target_triple": "x86_64-unknown-linux-gnu", "target_short": "amd64"}
   ]'
@@ -30,7 +30,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Build
     env:
-      targets: ${{env.targets}}
+      targets: ${{env.TARGETS}}
     strategy:
       matrix:
         arch: ${{ fromJSON(env.targets) }}
