@@ -74,7 +74,7 @@ impl AmdGPUStats {
     pub fn update_gpu_temp_info(&mut self, gpu_handle: AmdsmiProcessorHandle) {
         self.gpu_temp =
             amdsmi_get_temp_metric(gpu_handle, AmdsmiTemperatureTypeHotspot, AmdsmiTempCurrent)
-                .expect("Could notget AMDGPU Thermal")
+                .expect("Could not get AMDGPU Thermal")
     }
 
     pub fn update_all_sensors(&mut self, gpu_handle: AmdsmiProcessorHandle) {
