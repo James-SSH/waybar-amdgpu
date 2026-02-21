@@ -58,9 +58,9 @@ impl AmdGPUStats {
 
     pub fn update_gpu_mem_info(&mut self, gpu_handle: AmdsmiProcessorHandle) {
         let (mem_total, mem_used) = (
-            amdsmi_get_gpu_memory_total(gpu_handle, AmdsmiMemoryTypeT::AmdsmiMemTypeVisVram)
+            amdsmi_get_gpu_memory_total(gpu_handle, AmdsmiMemoryTypeT::AmdsmiMemTypeVram)
                 .expect("Could not get AMDGPU mem total"),
-            amdsmi_get_gpu_memory_usage(gpu_handle, AmdsmiMemoryTypeT::AmdsmiMemTypeVisVram)
+            amdsmi_get_gpu_memory_usage(gpu_handle, AmdsmiMemoryTypeT::AmdsmiMemTypeVram)
                 .expect("Could not get AMDGPU mem usage"),
         );
 
