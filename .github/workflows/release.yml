@@ -1,5 +1,7 @@
 name: Build & Release
 
+concurrency: waybar_amdgpu
+
 on:
   workflow_dispatch:
     inputs:
