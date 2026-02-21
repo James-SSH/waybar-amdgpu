@@ -25,8 +25,11 @@ jobs:
     name: Build
     strategy:
       matrix:
-        arch: [{"target_triple": "aarch64-unknown-linux-gnu", "target_short": "arm64"},{"target_triple": "x86_64-unknown-linux-gnu", "target_short": "amd64"}]
+        arch: [{"target_triple": "x86_64-unknown-linux-gnu", "target_short": "amd64"}]
     steps:
+      - name: Add glib
+        run: apt-get install libglib2.0-dev
+
       - uses: actions/checkout@v6
         with:
           fetch-depth: '1'
