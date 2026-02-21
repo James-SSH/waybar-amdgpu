@@ -19,21 +19,15 @@ on:
       - src/
       - Cargo.toml
 
-env:
-  TARGETS: '[
-  {"target_triple": "aarch64-unknown-linux-gnu", "target_short": "arm64"}, 
-  {"target_triple": "x86_64-unknown-linux-gnu", "target_short": "amd64"}
-  ]'
-
 jobs:
   build:
     runs-on: ubuntu-latest
     name: Build
     env:
-      targets: ${{env.TARGETS}}
+      TARGETS: '[{"target_triple": "aarch64-unknown-linux-gnu", "target_short": "arm64"},{"target_triple": "x86_64-unknown-linux-gnu", "target_short": "amd64"}]'
     strategy:
       matrix:
-        arch: ${{ fromJSON(env.targets) }}
+        arch: ${{ fromJSON(env.TARGETS) }}
     steps:
       - uses: actions/checkout@v6
         with:
@@ -61,7 +55,7 @@ jobs:
       - uses: mathieudutour/github-tag-action@v6.2
         id: tag
         with:
-          default_bump: ${{inputs.patch-level || 'patch'}}
+          default_bump: ${{ inputs.patch-level || 'patch' }}
           github_token: ${{ github.token }}
 
       - name: Fetch Objects
