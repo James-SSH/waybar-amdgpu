@@ -28,7 +28,7 @@ jobs:
         arch: [{"target_triple": "x86_64-unknown-linux-gnu", "target_short": "amd64"}]
     steps:
       - name: Add glib
-        run: apt-get install libglib2.0-dev
+        run: sudo apt-get install libglib2.0-dev
 
       - uses: actions/checkout@v6
         with:
