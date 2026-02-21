@@ -46,18 +46,11 @@ jobs:
           AMDSMI_LIB_DIR: '/lib/x86_64-linux-gnu/'
         run: cargo build --release --target ${{ matrix.arch.target_triple }}
 
-      - name: Check Target Directory
-        if: ${{ runner.debug == 1 }}
-        run: ls target/release/
-
-      - name: Find Library File
-        run: find . -name "libamdgpu.so"
-
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: libamdgpu-${{ matrix.arch.target_short }}.so
-          path: 'target/release/*.so'
+          path: 'target/${{ matrix.arch.target_triple }}/release/libamdgpuso'
           retention-days: 1
 
 
