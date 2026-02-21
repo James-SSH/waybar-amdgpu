@@ -30,7 +30,7 @@ jobs:
         arch: [{"target_triple": "x86_64-unknown-linux-gnu", "target_short": "amd64"}]
     steps:
       - name: Install dependencies
-        run: sudo bash -c 'echo "deb https://cz.archive.ubuntu.com/ubuntu questing main universe" >> /etc/apt/sources.list' && sudo apt update && sudo apt install libgtk-3-dev libamd-smi-dev
+        run: sudo bash -c 'echo "deb https://cz.archive.ubuntu.com/ubuntu questing main universe" >> /etc/apt/sources.list' && sudo apt update && sudo apt install libgtk-3-dev libamd-smi-dev && export AMDSMI_LIB_DIR='/lib/x86_64-linux-gnu'
 
       - uses: actions/checkout@v6
         with:
