@@ -29,7 +29,7 @@ jobs:
       matrix:
         arch: [{"target_triple": "x86_64-unknown-linux-gnu", "target_short": "amd64"}]
     steps:
-      - name: Add glib
+      - name: Add gtk3
         run: sudo apt update && sudo apt install libgtk-3-dev
 
       - uses: actions/checkout@v6
