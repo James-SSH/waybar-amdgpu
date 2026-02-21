@@ -50,7 +50,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: libamdgpu-${{ matrix.arch.target_short }}.so
-          path: 'target/release/libamdgpu.so'
+          path: 'target/release/*.so'
           retention-days: 1
 
 
