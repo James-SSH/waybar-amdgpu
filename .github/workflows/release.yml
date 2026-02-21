@@ -64,7 +64,7 @@ jobs:
         id: tag
         with:
           default_bump: ${{ inputs.patch-level || 'patch' }}
-          github_token: ${{ github.token }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Fetch Objects
         uses: actions/download-artifact@v7

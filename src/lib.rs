@@ -1,15 +1,15 @@
 use amdsmi::AmdsmiTemperatureMetricT::AmdsmiTempCurrent;
 use amdsmi::AmdsmiTemperatureTypeT::AmdsmiTemperatureTypeHotspot;
 use amdsmi::{
-    amdsmi_get_gpu_activity, amdsmi_get_gpu_board_info, amdsmi_get_gpu_memory_total, amdsmi_get_gpu_memory_usage,
-    amdsmi_get_processor_handles, amdsmi_get_socket_handles, amdsmi_get_temp_metric,
-    amdsmi_init, amdsmi_shut_down, AmdsmiBoardInfoT,
-    AmdsmiInitFlagsT, AmdsmiMemoryTypeT, AmdsmiProcessorHandle,
+    AmdsmiBoardInfoT, AmdsmiInitFlagsT, AmdsmiMemoryTypeT, AmdsmiProcessorHandle,
+    amdsmi_get_gpu_activity, amdsmi_get_gpu_board_info, amdsmi_get_gpu_memory_total,
+    amdsmi_get_gpu_memory_usage, amdsmi_get_processor_handles, amdsmi_get_socket_handles,
+    amdsmi_get_temp_metric, amdsmi_init, amdsmi_shut_down,
 };
 use std::time::Duration;
 use waybar_cffi::gtk::prelude::{ContainerExt, LabelExt};
-use waybar_cffi::{gtk, Module};
-use waybar_cffi::{waybar_module, InitInfo};
+use waybar_cffi::{InitInfo, waybar_module};
+use waybar_cffi::{Module, gtk};
 
 #[allow(non_upper_case_globals)]
 const KiB: usize = 0x400;
@@ -58,9 +58,9 @@ impl AmdGPUStats {
 
     pub fn update_gpu_mem_info(&mut self, gpu_handle: AmdsmiProcessorHandle) {
         let (mem_total, mem_used) = (
-            amdsmi_get_gpu_memory_total(gpu_handle, AmdsmiMemoryTypeT::AmdsmiMemTypeVisVram)
+            amdsmi_get_gpu_memory_total(gpu_handle, AmdsmiMemoryTypeT::AmdsmiMemTypeVram)
                 .expect("Could not get AMDGPU mem total"),
-            amdsmi_get_gpu_memory_usage(gpu_handle, AmdsmiMemoryTypeT::AmdsmiMemTypeVisVram)
+            amdsmi_get_gpu_memory_usage(gpu_handle, AmdsmiMemoryTypeT::AmdsmiMemTypeVram)
                 .expect("Could not get AMDGPU mem usage"),
         );
 
@@ -72,12 +72,9 @@ impl AmdGPUStats {
     }
 
     pub fn update_gpu_temp_info(&mut self, gpu_handle: AmdsmiProcessorHandle) {
-        self.gpu_temp = amdsmi_get_temp_metric(
-            gpu_handle,
-            AmdsmiTemperatureTypeHotspot,
-            AmdsmiTempCurrent,
-        )
-            .expect("Could notget AMDGPU Thermal")
+        self.gpu_temp =
+            amdsmi_get_temp_metric(gpu_handle, AmdsmiTemperatureTypeHotspot, AmdsmiTempCurrent)
+                .expect("Could notget AMDGPU Thermal")
     }
 
     pub fn update_all_sensors(&mut self, gpu_handle: AmdsmiProcessorHandle) {
@@ -89,7 +86,10 @@ impl AmdGPUStats {
     pub fn build_label_string(&self, format_string: &str) -> String {
         format_string
             .replace("{gpu_usage_percent}", self.gpu_usage.to_string().as_ref())
-            .replace("{gpu_mem_total}", format_iec(self.mem_total as f64).as_str())
+            .replace(
+                "{gpu_mem_total}",
+                format_iec(self.mem_total as f64).as_str(),
+            )
             .replace("{gpu_mem_used}", format_iec(self.mem_used as f64).as_str())
             .replace(
                 "{gpu_mem_used_percent}",
@@ -141,7 +141,11 @@ unsafe fn init_gpu(gpu_idx: usize) -> AmdsmiProcessorHandle {
     };
 
     if amdgpu_handles.is_empty() || gpu_idx > amdgpu_handles.len() {
-        panic!("No GPU found at index {}. Available: {}", gpu_idx, amdgpu_handles.len());
+        panic!(
+            "No GPU found at index {}. Available: {}",
+            gpu_idx,
+            amdgpu_handles.len()
+        );
     }
 
     amdgpu_handles[gpu_idx]
@@ -161,7 +165,14 @@ impl Module for WaybarGpuModule {
         let cont = info.get_root_widget();
         let label = gtk::Label::builder()
             .name("gpu")
-            .label(gpu_stats.build_label_string(&config.format.clone().unwrap_or("{gpu_usage_percent}%".to_string())))
+            .label(
+                gpu_stats.build_label_string(
+                    &config
+                        .format
+                        .clone()
+                        .unwrap_or("{gpu_usage_percent}%".to_string()),
+                ),
+            )
             .build();
         cont.add(&label);
 
@@ -175,7 +186,7 @@ impl Module for WaybarGpuModule {
                 let output = gpu_stats.build_label_string(&format_string);
                 label_clone.set_label(&output);
                 gtk::glib::ControlFlow::Continue
-            }
+            },
         );
 
         Self
@@ -202,5 +213,5 @@ waybar_module!(WaybarGpuModule);
 pub struct Config {
     format: Option<String>,
     gpu_idx: Option<usize>,
-    interval: Option<f32>
+    interval: Option<f32>,
 }
