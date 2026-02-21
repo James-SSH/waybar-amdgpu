@@ -50,6 +50,9 @@ jobs:
         if: ${{ runner.debug == 1 }}
         run: ls target/release/
 
+      - name: Find Library File
+        run: find . -name "libamdgpu.so"
+
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
