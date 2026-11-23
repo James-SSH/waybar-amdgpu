@@ -10,4 +10,4 @@ name = "amdgpu"
 [dependencies]
 waybar-cffi = "0.1.1"
 serde = { version = "1", features = ["derive"] }
-amdsmi = {path = "src/amdsmi/rust-interface"}
+amdsmi = {path = "src/rocm-systems/projects/amdsmi/rust-interface"}
