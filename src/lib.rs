@@ -33,14 +33,7 @@ pub struct AmdGPUStats {
 
 impl AmdGPUStats {
     pub fn from_gpu_handle(gpu_handle: AmdsmiProcessorHandle) -> Self {
-        let mut stats = Self {
-            gpu_usage: 0,
-            mem_used: 0,
-            mem_used_percent: 0.0,
-            mem_total: 0,
-            mem_free: 0,
-            gpu_temp: 0,
-        };
+        let mut stats = Self::default();
 
         stats.update_all_sensors(gpu_handle);
         stats
@@ -98,6 +91,19 @@ impl AmdGPUStats {
             .replace("{gpu_mem_free}", format_iec(self.mem_free as f64).as_str())
             .replace("{gpu_usage}", self.gpu_usage.to_string().as_str())
             .replace("{gpu_temp}", self.gpu_temp.to_string().as_str())
+    }
+}
+
+impl Default for AmdGPUStats {
+    fn default() -> Self {
+        Self {
+            gpu_usage: 0,
+            mem_used: 0,
+            mem_used_percent: 0.0,
+            mem_total: 0,
+            mem_free: 0,
+            gpu_temp: 0,
+        }
     }
 }
 
