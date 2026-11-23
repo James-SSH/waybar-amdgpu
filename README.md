@@ -31,7 +31,7 @@
 It only targets **AMD64** because the associating libraries don't cross compile to any other architecture :)
 
 ### Dependencies
-- [AMD ROCm SMI](https://github.com/ROCm/amdsmi)
+- [AMD ROCm SMI](https://github.com/ROCm/rocm-systems/tree/develop/projects/amdsmi)
 
 #### Packages that provides Rust
 ##### Fedora
